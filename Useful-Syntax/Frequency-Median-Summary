@@ -1,0 +1,29 @@
+# Install and load the dplyr package if you haven't already
+# install.packages("dplyr")
+library(dplyr)
+library(openxlsx)
+
+# Load in the dataset from your working directory
+dataset <- read.csv("WIP.csv")
+#Quick check of the structure of the data
+str(dataset)
+
+# Create the summary table grouping up by procedure name, 
+summary_table <- dataset %>%
+  group_by(PlannedProcedureDescription) %>%
+  summarise(
+    frequency = n(),   # Count of observations in each category
+    median_value = median(Duration.in.Minutes, na.rm = TRUE)  # Median of the duration
+  ) %>%
+  arrange(desc(frequency))   # Order the table by frequency in descending order
+
+# Print the summary table
+print(summary_table)
+
+#Define the exel file path where to save
+excel_file_path <- "\\\\ntghdata4\\information\\Thomas\\Work in Progress\\Theatre data\\T&ODurations.xlsx"
+# write out the excel file to send
+write.xlsx(summary_table, excel_file_path, detectDates = TRUE, na = "")
+
+
+
